@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure Calmness | Breathe & Relax</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #e8f4f8;
+            --secondary: #b8d4e3;
+            --accent: #7fb3d5;
+            --text: #2c3e50;
+            --text-light: #5a6c7d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        /* Ambient Background Animation */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #e0f7fa, #f3e5f5, #e8f5e9, #fff3e0);
+            background-size: 400% 400%;
+            animation: ambientShift 15s ease infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes ambientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 2s ease 0.5s forwards;
+            font-weight: 300;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Breathing Circle */
+        .breathing-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 3rem;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(127, 179, 213, 0.3);
+        }
+
+        .circle-outer {
+            width: 100%;
+            height: 100%;
+            animation: pulse 8s infinite ease-in-out;
+        }
+
+        .circle-middle {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            animation: pulse 8s infinite ease-in-out 0.5s;
+        }
+
+        .circle-inner {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            background: radial-gradient(circle, rgba(127, 179, 213, 0.2) 0%, transparent 70%);
+            animation: pulse 8s infinite ease-in-out 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .breath-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeIn 2s ease 1s forwards;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(127, 179, 213, 0.3);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            color: var(--text);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(127, 179, 213, 0.2);
+        }
+
+        .btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Quote Section */
+        .quote-container {
+            margin-top: 3rem;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeIn 2s ease 1.5s forwards;
+        }
+
+        .quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text-light);
+            line-height: 1.6;
+            font-weight: 300;
+            transition: opacity 0.5s ease;
+        }
+
+        .quote-author {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        /* Sound Visualizer Bars */
+        .visualizer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 4px;
+            padding: 0 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .visualizer.active {
+            opacity: 0.3;
+        }
+
+        .bar {
+            width: 4px;
+            background: linear-gradient(to top, var(--accent), transparent);
+            border-radius: 2px 2px 0 0;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 20px; }
+            50% { height: 60px; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .breathing-container { width: 250px; height: 250px; }
+            .breath-text { font-size: 1.2rem; }
+        }
+
+        /* Zen Mode Toggle */
+        .zen-mode {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .zen-mode:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: rotate(180deg);
+        }
+
+        body.zen .subtitle,
+        body.zen .controls,
+        body.zen .quote-container {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.zen h1 {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="particles"></div>
+    
+    <button class="zen-mode" onclick="toggleZen()" title="Toggle Zen Mode">☯</button>
+
+    <div class="container">
+        <h1>Pure Calmness</h1>
+        <p class="subtitle">Inhale peace, exhale stress</p>
+
+        <div class="breathing-container">
+            <div class="circle circle-outer"></div>
+            <div class="circle circle-middle"></div>
+            <div class="circle circle-inner"></div>
+            <div class="breath-text" id="breathText">Breathe In</div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="soundBtn" onclick="toggleSound()">
+                <span id="soundText">Play Rain Sounds</span>
+            </button>
+            <button class="btn" onclick="newQuote()">New Quote</button>
+            <button class="btn" onclick="toggleBreathing()">Pause Breathing</button>
+        </div>
+
+        <div class="quote-container">
+            <p class="quote" id="quote">"Peace comes from within. Do not seek it without."</p>
+            <p class="quote-author" id="author">— Buddha</p>
+        </div>
+    </div>
+
+    <div class="visualizer" id="visualizer"></div>
+
+    <script>
+        // Breathing Exercise Logic
+        let breathingActive = true;
+        let breathPhase = 0; // 0: inhale, 1: hold, 2: exhale, 3: hold
+        
+        const breathText = document.getElementById('breathText');
+        const breathPhases = ['Breathe In', 'Hold', 'Breathe Out', 'Hold'];
+        const phaseDurations = [4000, 2000, 4000, 2000]; // 4-7-8 breathing variation
+        
+        function updateBreath() {
+            if (!breathingActive) return;
+            
+            breathText.textContent = breathPhases[breathPhase];
+            breathText.style.opacity = '1';
+            
+            setTimeout(() => {
+                if (breathingActive) {
+                    breathPhase = (breathPhase + 1) % 4;
+                    updateBreath();
+                }
+            }, phaseDurations[breathPhase]);
+        }
+        
+        setTimeout(updateBreath, 2000);
+        
+        function toggleBreathing() {
+            breathingActive = !breathingActive;
+            event.target.textContent = breathingActive ? 'Pause Breathing' : 'Resume';
+            if (breathingActive) updateBreath();
+        }
+
+        // Quotes Database
+        const quotes = [
+            { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+            { text: "The present moment is filled with joy and happiness. If you are attentive, you will see it.", author: "Thich Nhat Hanh" },
+            { text: "Quiet the mind, and the soul will speak.", author: "Ma Jaya Sati Bhagavati" },
+            { text: "Almost everything will work again if you unplug it for a few minutes, including you.", author: "Anne Lamott" },
+            { text: "Your calm mind is the ultimate weapon against your challenges.", author: "Bryant McGill" },
+            { text: "Nature does not hurry, yet everything is accomplished.", author: "Lao Tzu" },
+            { text: "The soul always knows what to do to heal itself. The challenge is to silence the mind.", author: "Caroline Myss" }
+        ];
+
+        function newQuote() {
+            const quoteEl = document.getElementById('quote');
+            const authorEl = document.getElementById('author');
+            
+            quoteEl.style.opacity = '0';
+            
+            setTimeout(() => {
+                const random = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteEl.textContent = `"${random.text}"`;
+                authorEl.textContent = `— ${random.author}`;
+                quoteEl.style.opacity = '1';
+            }, 500);
+        }
+
+        // Ambient Sound Simulation (Web Audio API)
+        let audioContext;
+        let isPlaying = false;
+        let noiseNode;
+        let gainNode;
+
+        function createRainSound() {
+            const bufferSize = 2 * audioContext.sampleRate;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const output = buffer.getChannelData(0);
+            
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            
+            noiseNode = audioContext.createBufferSource();
+            noiseNode.buffer = buffer;
+            noiseNode.loop = true;
+            
+            // Create filter for rain-like sound
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 800;
+            
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 0.1;
+            
+            noiseNode.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            noiseNode.start();
+        }
+
+        function toggleSound() {
+            const btn = document.getElementById('soundBtn');
+            const text = document.getElementById('soundText');
+            const visualizer = document.getElementById('visualizer');
+            
+            if (!isPlaying) {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                createRainSound();
+                btn.classList.add('active');
+                text.textContent = 'Stop Sounds';
+                visualizer.classList.add('active');
+                createVisualizerBars();
+                isPlaying = true;
+            } else {
+                if (noiseNode) {
+                    noiseNode.stop();
+                    noiseNode.disconnect();
+                }
+                btn.classList.remove('active');
+                text.textContent = 'Play Rain Sounds';
+                visualizer.classList.remove('active');
+                visualizer.innerHTML = '';
+                isPlaying = false;
+            }
+        }
+
+        function createVisualizerBars() {
+            const visualizer = document.getElementById('visualizer');
+            visualizer.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.animationDelay = `${Math.random() * 2}s`;
+                bar.style.height = `${Math.random() * 40 + 20}px`;
+                visualizer.appendChild(bar);
+            }
+        }
+
+        // Particle System
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.width = Math.random() * 10 + 5 + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 25000);
+                }, i * 1000);
+            }
+        }
+        
+        createParticles();
+        setInterval(createParticles, 20000);
+
+        // Zen Mode
+        function toggleZen() {
+            document.body.classList.toggle('zen');
+        }
+
+        // Smooth scroll behavior
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 1s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
